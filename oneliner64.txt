@@ -1,0 +1,7 @@
+Oneliner64 Game for Commodore 64
+
+Original code: 1?tArN(0)*39)"*":gEk:p=p+(k=1)-(k=9):pO1284+p,22:onp<420aN(pE(1324+p)=42)+2gO,1
+
+Upgraded code: 0?tArN(.)*39)"*":gEk:p=p+(k=1)-(k=9):pO55556+p,5:pO1284+p,22:ifpE(1324+p)<>42gO 
+
+Joep Geevers webiste: http://oneliner64.com/
