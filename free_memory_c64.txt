@@ -1,0 +1,68 @@
+Free Memory on C64, Garbage collector
+
+
+Get amount of free memory in basic:
+------------------------------
+
+Using build in Free() function
+?fre(0)+65536
+
+or complete code that deals with all memory values is:
+
+?fre(0)+65536*(fre(0)<0)
+
+or Do it manualy, the safe way:
+
+sys46374:rem call garbage collector routine
+?(pE(52)-pE(50))*256+(pE(51)-pE(49)):rem calculate free memory
+
+
+
+Generate array of strings, 4600 elements, c64 will froze before it reached the end of the array
+------------------------------------------------------------------------------------------------
+
+10 dim a$(4600):a=0
+20 for t = 1 to 4600
+30 a$(t) = "#" + str$(t)
+40 a=(pE(52)-pE(50))*256+(pE(51)-pE(49))
+50 ?t,int((a/38911)*100)"%"
+60 next
+------------------------------
+
+
+Generate array of integers, calcuate time and size
+---------------------------------------------------
+
+1 p=(pE(52)-pE(50))*256+(pE(51)-pE(49))
+2 t1=ti
+3 dim a%(2000)
+
+10 for i=0to2000
+20 a%(i)=i
+30 next
+
+50 ft=ti-t1
+60 ?ft, (ft/60)
+70 g=(pE(52)-pE(50))*256+(pE(51)-pE(49))
+80 ?p-g, "bytes"
+
+
+
+Generate array of floats, calcuate time and size
+---------------------------------------------------
+
+1 p=(pE(52)-pE(50))*256+(pE(51)-pE(49))
+2 t1=ti
+3 dim a(2000)
+
+10 for i=0to2000
+20 a(i)=i
+30 next
+
+50 ft=ti-t1
+60 ?ft, (ft/60)
+70 g=(pE(52)-pE(50))*256+(pE(51)-pE(49))
+80 ?p-g, "bytes"
+---------------------------------------------------
+
+
