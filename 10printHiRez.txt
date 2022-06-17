@@ -17,7 +17,7 @@ QR-code 10 print maze
 
 ----------------------------------------------------
 
-QR-code 10 print maze
+Similar to QR-code but simpler
 
 10 ?mid$(cH(236)+cH(251)+cH(252)+cH(254),rnd(1)*4+1,1);:goto 10
 
