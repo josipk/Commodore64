@@ -39,8 +39,13 @@ Full Checkerboard
 
 ----------------------------------------------------
 
-Small Checkerboard (Squished)
+Bigger Checkerboard (Squished)
 10 ?cH(18)+cH(226)+cH(146)+cH(226);:goto 10
+
+----------------------------------------------------
+
+Small Checkerboard
+1 ?chr$(191);:goto1
 
 ----------------------------------------------------
 
