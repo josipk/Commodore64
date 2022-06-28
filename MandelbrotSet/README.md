@@ -3,15 +3,15 @@
 
 
 ## MandelbrotSet in Basic
-c64-mandelbrot.bas
-c64-mandelbrot.prg
+- c64-mandelbrot.bas
+- c64-mandelbrot.prg
 
 
 ## MandelbrotSet in C
 
-mandelbrot1.c - Normal Mandelbrot Set 
-mandelbrot2.c - Petscii Array Mandelbrot Set
-mandelbrot3.c - ZoomOut Mandelbrot Set
+- mandelbrot1.c - Normal Mandelbrot Set 
+- mandelbrot2.c - Petscii Array Mandelbrot Set
+- mandelbrot3.c - ZoomOut Mandelbrot Set
 
 
 ### Floating point library is needed to build C scripts with a CC65 compiler.
