@@ -1,4 +1,4 @@
-Prime Numbers Visualisation:
+Prime Numbers Visualization:
 ```
 10 print chr$(147)
 20 for n=1 to 1000
@@ -15,7 +15,7 @@ Prime Numbers Visualisation:
 ```
 
 
-Prime Numbers Visualisation (with extra colours):
+Prime Numbers Visualization (with extra colours):
 ```
 10 print chr$(147):c=1
 20 for n=1 to 1000
