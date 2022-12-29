@@ -1,4 +1,4 @@
-# Christams Tree in Commodore Basic v2
+# Christmas Tree in Commodore Basic v2
 
 ```
 0 rem christmas tree
