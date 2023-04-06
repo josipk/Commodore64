@@ -1,0 +1,107 @@
+*Pick And Place List
+*Company=
+*Author=
+*eMail=
+*
+*Project=ay-pong-crystal_flipflop
+*Date=18:35:02
+*CreatedBy=Fritzing 0.9.3b.04.19.5c895d327c44a3114e5fcc9d8260daf0cbb52806
+*
+*
+*Coordinates in mm, always center of component
+*Origin 0/0=Lower left corner of PCB
+*Rotation in degree (0-360, math. pos.)
+*
+*No;Value;Package;X;Y;Rotation;Side;Name
+1;;;1.93792;-1.93743;0;Bottom;Hole4
+2;;;77.3254;-17.3981;0;Bottom;Via5
+3;;;2.12588;-34.393;0;Bottom;Hole6
+4;220;THT;75.3014;-51.8258;0;Bottom;R4
+5;;;51.0852;-26.0226;0;Bottom;Via14
+6;;THT;44.6741;-21.0664;0;Bottom;J5
+7;;;72.5073;-11.4623;0;Bottom;TXT8
+8;;;72.3512;-7.90654;0;Bottom;TXT8
+9;;;19.3533;-51.2204;0;Bottom;Via29
+10;;;62.1286;-11.6381;0;Bottom;TXT8
+11;;;82.2662;-60.4237;0;Bottom;TXT8
+12;;;75.5319;-54.7968;0;Bottom;TXT8
+13;470;THT;75.3014;-55.0026;0;Bottom;R3
+14;;;76.575;-21.4098;0;Bottom;TXT1
+15;;;97.9875;-35.5219;0;Bottom;Hole5
+16;;300 mil [THT];35.5225;-69.2944;90;Bottom;D2
+17;;;22.8924;-14.8728;0;Bottom;Via4
+18;;;28.9426;-77.2907;0;Bottom;Via22
+19;68k;THT;89.7656;-51.7568;0;Bottom;R7
+20;100nF;100 mil [THT, electrolytic];29.0407;-24.8114;0;Bottom;C9
+21;;;31.5331;-69.3031;90;Bottom;TXT8
+22;220;THT;75.1247;-58.1795;0;Bottom;R5
+23;;;22.6158;-26.775;0;Bottom;Via12
+24;220;THT;6.65339;-54.8187;90;Bottom;R18
+25;100nF;100 mil [THT, electrolytic];82.0203;-63.8043;180;Bottom;C3
+26;1µF;100 mil [THT, electrolytic];91.9796;-59.7402;0;Bottom;C1
+27;;DIP16 [THT];50.859;-58.1889;-90;Bottom;U2
+28;;THT;88.7318;-75.7852;-90;Bottom;J1
+29;;;38.7772;-61.9378;0;Bottom;Via26
+30;;;58.8859;-26.0832;0;Bottom;Via13
+31;;;89.7623;-51.6084;0;Bottom;TXT8
+32;;TO220 [THT];13.8444;-57.5841;0;Bottom;Q1
+33;;;86.2047;-20.1405;0;Bottom;Via27
+34;;;1.93792;-78.0433;0;Bottom;Hole1
+35;10k;THT;89.8539;-54.7222;0;Bottom;R6
+36;;;6.61375;-54.6085;90;Bottom;TXT8
+37;;;98.0817;-1.93715;0;Bottom;Hole3
+38;;;98.0817;-78.0433;0;Bottom;Hole2
+39;;;35.6022;-57.8126;0;Bottom;Via24
+40;;;29.3191;-21.289;0;Bottom;TXT8
+41;;;78.6361;-39.1907;0;Bottom;TXT7
+42;;THT;75.885;-75.8013;-90;Bottom;J2
+43;;THT;64.0269;-55.8418;0;Bottom;J10
+44;;;69.9182;-75.2776;0;Bottom;Via3
+45;220;THT;27.9868;-11.2744;0;Bottom;R10
+46;;;75.5745;-51.707;0;Bottom;TXT8
+47;100nF;100 mil [THT, electrolytic];38.895;-8.10248;180;Bottom;C6
+48;;dipswitch-02;12.6546;-41.8215;-90;Bottom;SW1
+49;;;44.5064;-38.979;0;Bottom;TXT4
+50;;;3.38657;-43.0479;0;Bottom;Via15
+51;;;28.3536;-11.1879;0;Bottom;TXT8
+52;;;53.8902;-17.3185;0;Bottom;Via31
+53;;THT;12.1651;-11.7426;180;Bottom;R1
+54;;THT;40.6741;-21.0664;0;Bottom;J4
+55;;;35.3908;-69.0764;90;Bottom;TXT8
+56;;;59.0408;-17.3185;0;Bottom;Via30
+57;;;76.6832;-24.431;0;Bottom;TXT2
+58;;THT;48.6743;-21.0664;0;Bottom;J6
+59;;;75.4481;-58.0423;0;Bottom;TXT8
+60;100nF;100 mil [THT, electrolytic];62.2692;-8.06381;0;Bottom;C5
+61;220;THT;72.1865;-11.5687;0;Bottom;R12
+62;100nF;100 mil [THT, electrolytic];23.0223;-56.7943;0;Bottom;C8
+63;;;50.6872;-58.1137;0;Bottom;TXT5
+64;;;38.7927;-11.4609;0;Bottom;TXT8
+65;;;10.233;-70.2938;90;Bottom;Power plug1
+66;;dipswitch-02;12.5662;-35.2537;-90;Bottom;SW2
+67;;;28.0315;-7.86393;0;Bottom;TXT8
+68;100nF;100 mil [THT, electrolytic];74.5688;-63.8622;0;Bottom;C2
+69;;;51.5056;-71.4894;0;Bottom;U3
+70;;;23.3196;-73.0614;0;Bottom;TXT3
+71;;5 mm [THT];12.375;-50.066;0;Bottom;LED1
+72;100;THT;31.6653;-69.5766;90;Bottom;R16
+73;;DIP (Dual Inline) [THT];78.523;-39.2401;-90;Bottom;IC2
+74;;THT;36.6742;-21.0664;0;Bottom;J3
+75;;[THT];23.1944;-66.7689;0;Bottom;S1
+76;;;89.8328;-54.5718;0;Bottom;TXT8
+77;;;51.2917;-69.8388;0;Bottom;TXT6
+78;;THT;87.7459;-11.8453;0;Bottom;R2
+79;10k;THT;72.1543;-7.97407;0;Bottom;R13
+80;;;19.3603;-48.8428;0;Bottom;Via28
+81;10k;THT;27.9953;-8.01188;0;Bottom;R11
+82;;;51.4987;-72.2366;0;Bottom;TXT9
+83;;;3.24405;-70.5781;0;Bottom;Via6
+84;;;78.5101;-69.4078;0;Bottom;TXT8
+85;;THT;45.8758;-50.4592;-90;Bottom;J9
+86;;;38.655;-75.127;0;Bottom;Via25
+87;;;3.2384;-59.9236;0;Bottom;Via7
+88;;;74.563;-66.9757;0;Bottom;TXT8
+89;68;THT;78.232;-69.3884;0;Bottom;R17
+90;;DIP (Dual Inline) [THT];44.9467;-39.348;-90;Bottom;IC1
+91;;;92.4812;-62.9947;0;Bottom;TXT8
+92;;;23.2691;-53.2312;0;Bottom;TXT8
