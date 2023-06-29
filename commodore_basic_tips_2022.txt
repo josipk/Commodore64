@@ -1,0 +1,98 @@
+Commodore Basic Tips 2022
+------------------------------------------------------------
+
+
+Modulo Operator in Basic
+
+a%b = a-int(a/b)*b
+------------------------------------------------------------
+
+Do some action every 5 cycles/every 5 point
+
+10 a=0 :rem number of points
+20 a=a+1
+30 ifa/5=int(a/5)then?"nice play"
+40 ?"number of points"a
+50 goto 20
+------------------------------------------------------------
+
+
+
+Frequency of events
+------------------------------------------------------------
+Generate 1 or 0 numbers with 1/10 probability
+1 a=(int(rN(.)*10)=1)*-1
+2 print a;:goto 1
+
+Generate 0 or random number between 1 and 3 with 1/10 probability
+1 a=(int(rN(.)*10)=1)*-(int(rN(.)*3)+1)
+2 print a;:goto 1
+
+Test program:
+----------------------------
+1 t=0:f=0:a=rnd(-ti)
+2 fori=1to100
+3 a=(int(rN(.)*10)=1)*-1
+4 if(a=1)tHt=t+1
+5 if(a=0)tHf=f+1
+6 next
+7 ?t"%",f"%"
+------------------------------------------------------------
+
+
+
+Using TI to generate 0 or 1 with 1/3 probability
+------------------------------------------------------------
+1 a=ti:b=(a-int(a/3)*3=0)*-1
+2 print b;:goto 1
+
+Test program:
+----------------------------
+1 t=0:f=0
+2 fori=1to100
+3 a=ti:b=((a-int(a/3)*3)=0)*-1
+4 if(b<>0)tHt=t+1
+5 if(b=0)tHf=f+1
+6 next
+7 ?t"%",f"%"
+------------------------------------------------------------
+
+
+
+
+Using SID chip to generate numbers with certain probability
+------------------------------------------------------------
+$d40e (54286)	frequency voice 3 low byte
+$d40f (54287)	frequency voice 3 high byte
+$d410 (54288)	pulse wave duty cycle voice 3 low byte
+$d41b (54299)	oscillator voice 3 (read only)
+
+Pulse Wave duty Cycle
+poke54288,0:poke54289,8 - 12bit number, 0 min, 4095 max ($FFF)
+									    0 - all time high
+										4096 - all time low								
+
+--------------------------
+Devide decimal number to hi and low byte
+
+hi = int(byte / 256)
+low = byte - 256 * hi
+--------------------------
+Generate 0 and 1 with 1/3 probability
+1 poke54286,20:poke54287,0:poke54290,64:poke54288,170:poke54289,10
+2 ?(peek(54299)=255)*-1
+3 goto 1
+
+-------------------------
+
+Test program:
+
+1 poke54286,20:poke54287,0:poke54290,64:poke54288,170:poke54289,10
+2 t=0:f=0
+3 fori=1to100
+4 a=peek(54299)
+5 if(a<>0)tHt=t+1
+6 if(a=0)tHf=f+1
+7 next
+8 ?t"%",f"%"
+------------------------------------------------------------

@@ -1,0 +1,55 @@
+10 PRINT program without using RND()
+---------------------------------------
+
+XOR  - ex or, exclusive or
+a=(x+y)-2*(xandy)
+
+MODULO
+a=(x-int(x/y)*y)
+
+
+10 PRINT with XOR
+1 y=127:a=9:m=2
+2 a=abs((a+y)-m*(aandy)-a)+pos(.)
+3 printmid$("NVVM",(aand3)+1,1);
+4 goto2
+
+
+10 PRINT with MODULO (1)
+1 y=127:a=9:m=2
+2 a=abs((a+y)-m*(aandy)-a)+pos(.)
+3 printmid$("NVVM",(aand3)+1,1);
+4 goto2
+
+
+10 PRINT with MODULO (2)
+1 y=127:a=9:m=2
+2 getk:m=abs(m+((k>0andk<=9)*(k+m)))
+3 a=abs((a+y)-m*(aandy)-a)+pos(.)
+4 printmid$("NNMM",(aand3)+1,1);
+5 goto2
+
+
+10 PRINT with MODULO and XOR (1)
+1 y=9:x=127
+2 a=(ti-int(ti/y)*y)
+3 b=(a+x)-2*(aandx)/(pos(.)+1)
+4 print mid$("NM",(band1)+1,1);
+5 goto 2
+
+10 PRINT with MODULO and XOR (2)
+0 a=1
+1 getk:a=a-((k>0andk<=9)*k)
+2 b=(ti-int(ti/9)*9)+((banda)or(a+pos(.)))
+3 printmid$("NM",(band1)+1,1);
+4 goto 1
+
+10 PRINT - One-liner (1)
+0 b=((ti-int(ti/9)*9)-b+pos(.))aN127/(b+1):?mI("NM",(baN1)+1,1);:gO
+
+10 PRINT - One-liner (2)
+0 b=((ti-int(ti/63)*63)-b+pos(.))+127/(b+9):?mI("NM",(baN1)+1,1);:gO
+
+
+
+

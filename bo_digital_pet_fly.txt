@@ -1,0 +1,52 @@
+Bo, digital pet fly for Commodore 64 
+====================================
+(Copy paste code directly to VICE)
+====================================
+0 rem bo flying through the forest
+10 x=(rN(-ti)*100)+100:x2=x:l=1024:s=0:z=pE(l+x)
+20 k=int(rN(.)*4):s=(k=0)-(k=1)+((k=2)*40)-((k=3)*40)
+30 x=x-(((x+s)>0aN(x+s)<999)*s):pOl+x2,z:z=pE(l+x):pOl+x,34:x2=x:gO20
+
+
+0 rem bo is hungry and needs to eat
+10 x=(rnd(-ti)*300)+300:x2=x:l=1024:s=0
+20 k=int(rnd(.)*4):s=(k=0)-(k=1)+((k=2)*40)-((k=3)*40)
+30 x=x-(((x+s)>0and(x+s)<999)*s):pOl+x2,32:pOl+x,34:x2=x:gO20
+
+
+0 rem bo eats the whole forest
+10 x=(rnd(-ti)*300)+300:x2=x:l=1024:s=0
+20 k=int(rnd(.)*4):s=(k=0)-(k=1)+((k=2)*40)-((k=3)*40)
+30 x=x-(((x+s)>0and(x+s)<999)*s):pOl+x2,160:pOl+x,162:x2=x:gO20
+
+
+0 rem bo is going crazy?!
+10 x=(rnd(-ti)*300)+300:x2=x:l=1024:z=55296:s=0
+20 k=int(rnd(.)*4):s=(k=0)-(k=1)+((k=2)*40)-((k=3)*40):u=(rnd(.)*14)+1
+30 x=x-(((x+s)>0and(x+s)<999)*s):pOl+x2,160:pOl+x,162:pOz+x,u:x2=x:gO20
+
+
+0 rem bo is colouring the forest
+10 x=int(rnd(-ti)*300)+300:x2=x:l=1024:c=55296:z=pE(l+x)
+20 k=int(rnd(.)*4):s=(k=0)-(k=1)+((k=2)*40)-((k=3)*40)
+30 u=int(rN(.)*14)+1:u=u-(u=6)*1
+40 x=x-(((x+s)>0and(x+s)<999)*s):pOl+x2,z:pOc+x2,u:z=pE(l+x):pOl+x,34:x2=x:gO20
+
+
+0 rem bo is playing with a friend
+10 x=(rN(-ti)*200)+100:x1=x:l=1024:z=pE(l+x)
+20 x2=(rN(-ti)*200)+200:x3=x2:z2=pE(l+x2)
+30 k=int(rN(.)*4):s=(k=0)-(k=1)+((k=2)*40)-((k=3)*40)
+40 k2=int(rN(.)*4):s2=(k2=0)-(k2=1)+((k2=2)*40)-((k2=3)*40)
+50 x=x-(((x+s)>0aN(x+s)<999)*s):pOl+x1,z:z=pE(l+x):pOl+x,34:x1=x
+60 x2=x2-(((x2+s2)>0aN(x2+s2)<999)*s2):pOl+x3,z2:z2=pE(l+x2):pOl+x2,34:x3=x2
+70 gO30
+
+0 rem bo is lost and tries to find a way home
+10 x=int(rN(-ti)*200)+250:x2=x:l=1024:s=0:z=pE(l+x)
+20 k=int(rN(.)*4):s=(k=0)-(k=1)+((k=2)*40)-((k=3)*40)
+30 x=x-(((x+s)>0aN(x+s)<999)*s):z=pE(l+x)
+40 ifz=32thenpOl+x2,z:pOl+x,34:x2=x:gO20
+50 x=x2:gO20
+
+====================================
