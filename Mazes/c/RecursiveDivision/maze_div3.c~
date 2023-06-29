@@ -1,0 +1,254 @@
+/************************************** 
+* CC65 Maze Demo                      *
+* JOsdIP RedTRO BITsd                    *
+* josip.kalebic@gmail.com, 2023.      *
+**************************************/
+//Build: cl65 maze_div.c -o maze_div.prg
+//new: cl65 maze_div.c -o maze_div.prg -t c64 -C c64_g.cfg
+
+#include <stddef.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <c64.h>
+#include <peekpoke.h>
+#include <cc65.h>
+#include <string.h>
+
+unsigned char* T = (char *) 0xd018;
+#define RASTER 0xD012
+
+uint8_t nd=1;
+uint8_t sd=2;
+uint8_t ed=4;
+uint8_t wd=8;
+
+uint8_t horizontal=0;
+uint8_t vertical=1;
+
+uint8_t grid[20][20];
+
+uint8_t width=20;
+uint8_t height=20;
+
+
+const unsigned char mazecharset[16][9] = { 
+	{0,   0,  0,  0,  0,  0,  0,  0,  0},
+	{1, 255,  0,  0,  0,  0,  0,  0,  0},
+	{2,   0,  0,  0,  0,  0,  0,  0,255},
+	{3, 255,  0,  0,  0,  0,  0,  0,255},
+	{4,   1,  1,  1,  1,  1,  1,  1,  1},
+	{5, 255,  1,  1,  1,  1,  1,  1,  1},
+	{6,   1,  1,  1,  1,  1,  1,  1,255},
+	{7, 255,  1,  1,  1,  1,  1,  1,255},
+	{8, 128,128,128,128,128,128,128,128},
+	{9, 255,128,128,128,128,128,128,128},
+	{10, 128,128,128,128,128,128,128,255},
+	{11, 255,128,128,128,128,128,128,255},
+	{12, 129,129,129,129,129,129,129,129},
+	{13, 255,129,129,129,129,129,129,129},
+	{14,129,129,129,129,129,129,129,255},
+	{15,255,129,129,129,129,129,129,255}
+};
+
+
+void setupChars(void) {
+
+	/*
+	    Bits #1-#3: In text mode, pointer to character memory (bits #11-#13), relative to VIC bank, memory address $DD00. 
+	    * Values:
+
+        %000x, 0: $0000-$07FF, 0-2047.
+
+        %001x, 1: $0800-$0FFF, 2048-4095.
+
+        %010x, 2: $1000-$17FF, 4096-6143.
+
+        %011x, 3: $1800-$1FFF, 6144-8191.
+
+        %100x, 4: $2000-$27FF, 8192-10239.
+
+        %101x, 5: $2800-$2FFF, 10240-12287.
+
+        %110x, 6: $3000-$37FF, 12288-14335.
+
+        %111x, 7: $3800-$3FFF, 14336-16383.
+
+		Values %010 and %011 in VIC bank #0 and #2 select Character ROM instead. 
+	 */
+	
+	
+	unsigned int i,j;
+	uint16_t char_start_pos = 2048;  //0x8800	
+	//-----------------------------------------
+    //Turn off KB and IO
+    //printf("turn off keyboard and IO\n");
+    POKE(56334, PEEK(56334) & 254);
+    POKE(1u, PEEK(1u) & 251);
+	
+
+    //copy charset to ram
+    //printf("copying charset to ram at 12288\n"); 0x3000
+    for (i=0; i<128; i++)
+    {
+        memcpy(char_start_pos, 53248, 8*i);
+    }
+
+	//mazecharset
+	for(i=0; i<16; i++) {
+		for(j=0; j<8; j++) {
+			POKE(char_start_pos+(mazecharset[i][0]*8)+j, mazecharset[i][j+1]);
+		}	
+	}
+
+    //turn back IO and Keyboard
+    //printf("turning back on keyboard and io\n");
+    POKE(1, PEEK(1) |4);
+    POKE(56334, PEEK(56334) |1);
+
+    //printf("pointing VIC 2 to new charset location\n");
+    POKE(53272, (PEEK(53272) & 240) | 2); // (1110)
+
+}
+
+void delay(void) {
+	unsigned int t=0;
+	for(t=0;t<1000;t++) {}
+}
+
+
+void drawMaze(uint8_t x1, uint8_t y1) {
+
+	uint8_t x,y;
+	unsigned int p;
+	
+	for(y=0;y<y1;y++) {
+		for(x=0;x<x1;x++) {
+			p=y*40+x;
+			POKE(1024+p, grid[y][x]);
+ 		}
+	}
+	//delay();
+	return;
+
+}
+
+void divide(uint8_t mx, uint8_t my, uint8_t ax, uint8_t ay) {
+	
+	uint8_t x,y,dx,dy,xp,yp,ny,nx,wall;
+	
+    dx = ax - mx;
+    dy = ay - my;
+
+   
+    if( dx < 2 || dy < 2) {
+
+		if(dx > 1) {
+            y = my;
+            for(x=mx;x<(ax-1);++x) {
+                grid[y][x] &= ~ed;
+                POKE(1024+y*40+x, grid[y][x]);
+            }    
+        } else if(dy > 1) {
+            x = mx;
+            for(y=my;y<(ay-1);++y) {
+                grid[y][x] &= ~sd;
+                POKE(1024+y*40+x, grid[y][x]);
+            }
+		}		
+		
+        return;
+	}
+	
+    if(dy > dx) {
+		wall = horizontal;
+	} else if(dx > dy) {
+		wall = vertical;
+	} else {
+		wall = (uint8_t) (rand() % 1);
+	}
+
+    xp = (uint8_t) (rand() % (ax-mx-(wall == vertical)))+mx;
+    yp = (uint8_t) (rand() % (ay-my-(wall == horizontal)))+my;
+
+    x=xp;y=yp;
+
+    if(wall == horizontal) {
+        grid[y][x] &= ~sd;
+        POKE(1024+y*40+x, grid[y][x]);
+        
+        divide(mx, my, ax, y+1);
+        divide(mx, y+1, ax, ay);      
+       
+        
+	} else {
+        grid[y][x] &= ~ed;
+        POKE(1024+y*40+x, grid[y][x]);
+
+        divide(mx, my, x+1, ay);
+        divide(x+1, my, ax, ay);
+
+	}
+
+    
+
+
+	/*
+    divide(mx, my, ax, n+1);
+    divide(mx, y+1, ax, ay);
+	*/
+
+	
+	return;
+
+}
+
+
+
+
+int main(void) {
+
+	uint8_t x,y;
+	unsigned int p;
+	
+	*T = 20; //set big petscii chars!!!
+
+	setupChars();
+
+	clrscr(); //clear screen
+	//rand init, using raster line value as a seed
+	srand(PEEK(RASTER));
+
+
+	/*
+	for(y=0;y<height;y++) {
+		for(x=0;x<width;x++) {
+			grid[y][x] = 6;
+ 		}
+	}
+	*/
+	
+	memset(grid, 6, height*width*sizeof(grid[0]));
+	
+	drawMaze(width,height);
+
+	
+	divide(0, 0, width, height); 
+	
+	/*
+	for(y=0;y<10;y++) {
+		for(x=0;x<10;x++) {
+			printf("%i,%i:%i\n", y,x,grid[y][x]);	
+		}
+	}	
+	*/
+
+	drawMaze(width,height);
+	
+
+	cgetc();
+	
+
+	return EXIT_SUCCESS;
+}

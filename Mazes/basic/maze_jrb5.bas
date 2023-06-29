@@ -1,0 +1,78 @@
+1000 rem ------------------------------
+1010 rem maze in basic
+1020 rem recursive backtracker algo.
+1030 rem josip retro bits, 2023
+1040 rem ------------------------------
+1050 dim dp(1000):rem pos directions
+1060 dim sp(1000):rem stack pos
+1070 sc = 0: rem stack counter
+
+1079 rem available directions, lookup table
+1080 dim ad$(15) 
+1082 ad$(0)="0":ad$(1)="1":ad$(2)="2":ad$(3)="21":ad$(4)="4"
+1083 ad$(5)="41":ad$(6)="42":ad$(7)="421":ad$(8)="8":ad$(9)="81"
+1084 ad$(10)="82":ad$(11)="821":ad$(12)="84":ad$(13)="841"
+1085 ad$(14)="842":ad$(15)="8421"
+
+
+1100 rem main
+1105 poke 53280,0:poke 53281,0:printchr$(147);
+1110 x=rnd(-ti):x=0:y=0
+1120 p=y*40+x: sp(sc) = p: poke 1024+p,174
+1130 goto 2000
+1150 rem the end
+1160 geta$:ifa$="" then 1160:rem wait
+1999 end
+
+2000 rem main loop single step
+2010 rem input params: sc
+2020 if sc<0 then 1150: rem the end!
+2030 p=sp(sc)
+2040 y=int(p/40):x=p-(y*40)
+2050 rem ds=dp(p): rem get directions
+
+2060 if(dp(p) = 15) then goto 2200: rem this is dead end!
+
+2070 ndr = 15-dp(p)
+2071 dr$=ad$(ndr):a=len(dr$):b=rnd(1)*a+1
+2072 rdr = val(mid$(dr$,b,1))
+
+2090 rem mark this direction, create new position, mark all neighbours! 
+
+2100 if(rdr and 1) then if(y=0) then dp(p) = dp(p) or 1:goto 2020
+2101 if(rdr and 1) then y=y-1:a=4:goto 2132
+
+2110 if(rdr and 2) then if(x=0) then dp(p) = dp(p) or 2:goto 2020
+2111 if(rdr and 2) then x=x-1:a=8:goto 2132
+
+2120 if(rdr and 4) then if(y=24) then dp(p) = dp(p) or 4:goto 2020
+2121 if(rdr and 4) then y=y+1:a=1:goto 2132
+
+2130 if(rdr and 8) then if(x=39) then dp(p) = dp(p) or 8:goto 2020
+2131 if(rdr and 8) then x=x+1:a=2
+
+2132 cdh=(rdr=1orrdr=4)*-66+(rdr=2orrdr=8)*-67
+
+2133 b1=((rhr=2 and rdr=4) or (rhr=1 and rdr=8))*-85
+2134 b2 =((rhr=8 and rdr=4) or (rhr=1 and rdr=2))*-73
+2135 b3=((rhr=2 and rdr=1) or (rhr=4 and rdr=8))*-74
+2136 b4=((rhr=8 and rdr=1) or (rhr=4 and rdr=2))*-75
+2137 b5=((rhr=1 and rdr=1) or (rhr=4 and rdr=4))*-66
+2138 b6=((rhr=2 and rdr=2) or (rhr=8 and rdr=8))*-67
+2139 chp=b1+b2+b3+b4+b5+b6
+2140 p2=y*40+x: sc=sc+1: sp(sc)=p2: dp(p2) = dp(p2) or a
+2150 poke 1024+p2,cdh: rhr=rdr:if z=0 then poke 1024+p,chp
+
+2160 if(p2>39)then dp(p2-40) = dp(p2-40) or 4
+2165 if(p2<960)then dp(p2+40) = dp(p2+40) or 1
+2170 if(p2>0)then dp(p2-1) = dp(p2-1) or 8
+2175 if(p2<999)then dp(p2+1) = dp(p2+1) or 2
+
+
+2180 z=0:goto 2020
+
+
+2200 rem dead end, pop from stack, decrement counter
+2205 poke 55296+sp(sc),15
+2210 sp(sc)=0:sc=sc-1:z=1
+2220 goto 2020

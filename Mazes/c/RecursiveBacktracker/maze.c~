@@ -1,0 +1,193 @@
+/************************************** 
+* CC65 Maze Demo                      *
+* JOSIP RETRO BITS                    *
+* josip.kalebic@gmail.com, 2023.      *
+**************************************/
+//Build: cl65 maze.c -o maze.prg
+
+#include <stddef.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <c64.h>
+#include <peekpoke.h>
+#include <cc65.h>
+
+unsigned char* T = (char *) 0xd018;
+#define RASTER 0xD012
+
+uint8_t dp[1000] = {}; //directions
+unsigned int sp[1000] = {}; //stack
+unsigned int sc=0; //stack counter
+uint8_t we_are_done = 0;
+uint8_t spop = 0; //are we pop the stack?
+
+int dirlookup[16][5] = {
+	{0,0,0,0,0},
+	{1,1,0,0,0},
+	{1,2,0,0,0},
+	{2,2,1,0,0},
+	{1,4,0,0,0},
+	{2,4,1,0,0},
+	{2,4,2,0,0},
+	{3,4,2,1,0},
+	{1,8,0,0,0},
+	{2,8,1,0,0},
+	{2,8,2,0,0},
+	{3,8,2,1,0},			
+	{2,8,4,0,0},
+	{3,8,4,1,0},
+	{3,8,4,2,0},
+	{4,8,4,2,1}									
+	};
+
+
+
+void delay(void) {
+	unsigned int t=0;
+	for(t=0;t<500;t++) {}
+}
+
+uint8_t getRandomDirection(uint8_t ds) {
+
+	 uint8_t sd = ds^15; //15-ds
+	 uint8_t n = dirlookup[sd][0];
+	 uint8_t m = (uint8_t) (rand() % n);
+	 return dirlookup[sd][m+1];
+
+} 
+
+void markNeighbours(unsigned int p) {
+
+	if(p>=40) { dp[p-40] |= 4; }
+	if(p+40<1000) { dp[p+40] |= 1; }
+	if(p>=1) { dp[p-1] |= 8; }
+	if(p+1<1000) { dp[p+1] |= 2; }
+
+}
+
+
+void nextMove(void) {
+
+	unsigned int p2;
+	uint8_t cdh,chp,b1,b2,b3,b4,b5,b6;
+	uint8_t nextd,lastd;
+	uint8_t blockddir;
+
+	unsigned int p=sp[sc];
+    uint8_t y= (uint8_t) (p/40);
+    uint8_t x= (uint8_t) p-(y*40);
+	uint8_t ds=dp[p];
+	    
+	if(ds==15) {
+		//dead end
+		POKE(55296+p,15);
+		sp[sc]=0;
+		--sc;
+		spop=1;
+		if(sc==0) { we_are_done = 1; }
+		return;
+	}
+	
+	nextd = getRandomDirection(ds); 
+	blockddir = 0;
+
+	if(nextd & 1) { 
+		if(y==0) { 
+			dp[p] |= 1;
+			return;
+		} else {
+			y=y-1;
+			blockddir=4;
+		}	
+	} else if(nextd & 2) { 
+		if(x==0) { 
+			dp[p] |= 2;
+			return;
+		} else {
+			x=x-1;
+			blockddir=8;
+		}	
+	} else if(nextd & 4) { 
+		if(y==24) { 
+			dp[p] |= 4;
+			return;
+		} else {
+			y=y+1;
+			blockddir=1;
+		}	
+	} else if(nextd & 8) { 
+		if(x==39) { 
+			dp[p] |= 8;
+			return;
+		} else {
+			x=x+1;
+			blockddir=2;
+		}	
+	}
+
+	//current character
+	cdh=(nextd==1 || nextd==4)*66+(nextd==2 || nextd ==8)*67;
+
+	//previous character
+	b1=((lastd==2 && nextd==4) || (lastd==1 && nextd==8))*85;
+	b2 =((lastd==8 && nextd==4) || (lastd==1 && nextd==2))*73;
+	b3=((lastd==2 && nextd==1) || (lastd==4 && nextd==8))*74;
+	b4=((lastd==8 && nextd==1) || (lastd==4 && nextd==2))*75;
+	b5=((lastd==1 && nextd==1) || (lastd==4 && nextd==4))*66;
+	b6=((lastd==2 && nextd==2) || (lastd==8 && nextd==8))*67;
+	
+	chp=b1+b2+b3+b4+b5+b6;
+	
+
+	p2=y*40+x;
+	sc=sc+1;
+	sp[sc]=p2;
+	dp[p2] |= blockddir;
+	
+	lastd=nextd;
+	
+	if(spop==0) { POKE(1024+p,chp); }
+	POKE(1024+p2,cdh);
+
+	//mark taken directions for all 4 neighbours
+	markNeighbours(p2);
+
+	spop=0;
+	return;
+
+}
+
+
+
+
+int main(void) {
+
+	uint8_t x,y;
+	unsigned int p;
+	*T = 20; //set big petscii chars!!!
+
+	clrscr(); //clear screen
+
+	x=20;y=10;sc=0;
+	p=y*40+x;
+	sp[sc]=p;
+	POKE(1024+p,66);
+
+	//rand init, using raster line value as a seed
+	srand(PEEK(RASTER));
+	
+	
+	while(!we_are_done) {	
+		
+		nextMove();
+		//delay();
+				
+	}
+	
+	cgetc();
+	
+
+	return EXIT_SUCCESS;
+}

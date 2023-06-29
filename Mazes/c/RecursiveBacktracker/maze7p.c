@@ -1,0 +1,252 @@
+/************************************** 
+* CC65 Maze Demo 					  * 
+* Recursive Backtracker Algo.		  *
+* JOSIP RETRO BITS, 2023              *
+**************************************/
+//Build: cl65 maze7p.c -o maze7p.prg
+
+#include <stddef.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <c64.h>
+#include <peekpoke.h>
+#include <cc65.h>
+
+unsigned char* T = (char *) 0xd018;
+#define RASTER 0xD012
+
+uint8_t dp[1000] = {}; //directions
+unsigned int sp[1000] = {}; //stack
+unsigned int sc=0; //stack counter
+
+unsigned int tail[5] = {}; //stack
+uint8_t tailc=0;
+
+uint8_t we_are_done = 0;
+
+uint8_t nextd,lastd;
+
+uint8_t chr0=161;
+uint8_t chr1=160;
+
+//lookup table of hex to decimal conversion
+//{n,d1,d2,d3,d4}
+//array index is used as a hex value (0 - 15)
+//n - number of available directions
+//d1-d4 -directions (1,2,4 or 8)
+int dirlookup[16][5] = {
+	{0,0,0,0,0},
+	{1,1,0,0,0},
+	{1,2,0,0,0},
+	{2,2,1,0,0},
+	{1,4,0,0,0},
+	{2,4,1,0,0},
+	{2,4,2,0,0},
+	{3,4,2,1,0},
+	{1,8,0,0,0},
+	{2,8,1,0,0},
+	{2,8,2,0,0},
+	{3,8,2,1,0},			
+	{2,8,4,0,0},
+	{3,8,4,1,0},
+	{3,8,4,2,0},
+	{4,8,4,2,1}									
+	};
+
+
+
+void delay(void) {
+	unsigned int t=0;
+	for(t=0;t<200;t++) {}
+}
+
+uint8_t getRandomDirection(uint8_t ds) {
+
+	 uint8_t sd = ds^15; //15-ds
+	 uint8_t n = dirlookup[sd][0];
+	 uint8_t m = (uint8_t) (rand() % n);
+	 return dirlookup[sd][m+1];
+
+} 
+
+void markNeighbours(unsigned int p) {
+
+	if(p>79) { dp[p-80] |= 4; }
+	if(p<920) { dp[p+80] |= 1; }
+	if(p>1) { dp[p-2] |= 8; }
+	if(p<998) { dp[p+2] |= 2; }
+	return;
+}
+
+void checkTail() {
+	
+	uint8_t i;
+
+	POKE(55296+tail[0],0);
+
+	if(tailc>0) { 
+		for(i=0;i<tailc-1; ++i) {
+			tail[i] = tail[i+1];
+			POKE(55296+tail[i],i);
+		}	
+		--tailc; 
+	} 
+
+	return;
+}
+
+
+void addTail(unsigned int p) {
+
+	if(tailc==5) {
+		checkTail();
+	}
+	tail[tailc] = p;
+	POKE(55296+tail[tailc],tailc);
+	++tailc;
+	return;
+}
+
+//waiting for the raster line 9th bit
+void syncit(void)
+{
+    while(!((*(unsigned char*)0xd011) & 0x80)) {} ;
+}
+
+void nextMove(void) {
+
+	unsigned int p2;
+	uint8_t cdh;
+	uint8_t blockddir;
+	//unsigned int prevp;
+
+	unsigned int p=sp[sc];
+    uint8_t y= (uint8_t) (p/40);
+    uint8_t x= (uint8_t) p-(y*40);
+	uint8_t ds=dp[p];
+	    
+	if(ds==15) {
+		//dead end
+		sp[sc]=0;
+		--sc;
+		if(sc==0) { we_are_done = 1; }
+		addTail(p);
+		return;
+		
+	} else {
+		
+		checkTail();	
+		
+	}
+
+	//if(x%2>0 || y%2>0) {
+	if(sc%2>0) {
+		nextd=lastd;
+		dp[p]=15;
+	} else {
+		nextd = getRandomDirection(ds); 
+	}
+		
+	blockddir = 0;
+
+	if(nextd & 1) { 
+		if(y==0) { 
+			dp[p] |= 1;
+			return;
+		} else {
+			y=y-1;
+			blockddir=4;
+		}	
+	} else if(nextd & 2) { 
+		if(x==0) { 
+			dp[p] |= 2;
+			return;
+		} else {
+			x=x-1;
+			blockddir=8;
+		}	
+	} else if(nextd & 4) { 
+		if(y==24) { 
+			dp[p] |= 4;
+			return;
+		} else {
+			y=y+1;
+			blockddir=1;
+		}	
+	} else if(nextd & 8) { 
+		if(x==38) { 
+			dp[p] |= 8;
+			return;
+		} else {
+			x=x+1;
+			blockddir=2;
+		}	
+	}
+
+	//current character
+	cdh=chr1;
+
+	p2=y*40+x;
+	sc=sc+1;
+	sp[sc]=p2;
+	dp[p2] |= blockddir;
+	
+	lastd=nextd;
+	
+	POKE(1024+p,cdh); 
+	POKE(1024+p2,cdh);
+	
+	POKE(55296+p2,5);	
+	POKE(55296+p,15);
+
+	markNeighbours(p2);
+
+	return;
+
+}
+
+
+
+
+int main(void) {
+
+	uint8_t x,y;
+	unsigned int p;
+	*T = 20; //set big petscii chars!!!
+
+	clrscr(); //clear screen
+
+	POKE(53280,14);
+	POKE(53281,6);
+
+	x=0;y=0;sc=0;
+	p=y*40+x;
+	sp[sc]=p;
+
+	//rand init, using raster line value as a seed
+	srand(PEEK(RASTER));
+	
+	
+	while(!we_are_done) {	
+		
+		nextMove();
+		//delay();
+		syncit();
+				
+	}
+	
+	while(tailc > 0) {
+		checkTail();	
+	}
+
+	POKE(55296,4);
+	POKE(55296+998,4);
+	
+	
+	cgetc();
+	
+
+	return EXIT_SUCCESS;
+}
