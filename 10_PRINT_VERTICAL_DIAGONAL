@@ -1,0 +1,9 @@
+Vertical 10 PRINT: 
+  0fOi=.to39:fOj=.to24:?sPi)cH(205.5+rN(.))cH(11-(j<24)-(i<39));:nE:?cH(19);:nE
+
+Diagonal 10 PRINT: 
+  0fOi=.to63:j=i:fOa=0to24:pO1023-(a*40+j+1)*(j<40aNj>=0),rN(.)+77.5:j=j-1:nE:nE
+
+Spiral 10 PRINT: 
+  1p=1523:fOa=.to39stE2:fOj=.to3:s=(1-(j=1orj=3)*39)*(1+(j>1)*2)
+  2fOi=.toa:p=p+s:u=-(p>1023aNp<2025)*p:pOu,77.5+rN(.):nE:nE:p=p-41:nE
