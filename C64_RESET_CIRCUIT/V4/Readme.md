@@ -1,1 +1,2 @@
-Commodore 64 Reset Circuit ver.4
+Commodore 64 Reset Circuit ver.2(4)
+
