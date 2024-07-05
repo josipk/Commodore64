@@ -1,0 +1,10 @@
+5 *=$1000
+10 mloop lda $d012
+20 and #07
+25 tax
+30 inc $d011,x
+35 jsr $e097 !rnd
+90 jsr $ffe1 !scan for break
+92 bne mloop
+93 jsr $e5a0
+99 rts

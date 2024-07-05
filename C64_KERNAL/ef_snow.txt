@@ -1,0 +1,17 @@
+5 *=$1000
+6 lda #00
+7 sta $d021 !set bg color
+8 lda #01
+9 sta $0286 !set cursor color
+10 loop ldx #00
+15 lda $d012
+20 ora $a2
+25 tay
+30 jsr $e50c !set cursor pos.
+40 lda #$2a
+45 jsr $ffd2 !print char
+50 jsr $e566 !set cursors to home
+55 jsr $e981 !move line down
+90 jsr $ffe1
+95 bne loop
+97 rts

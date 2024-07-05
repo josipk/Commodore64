@@ -1,0 +1,20 @@
+5 *=$1000
+10 loop ldx #00
+15 lda $d012
+20 ora $a2
+25 tay
+30 jsr $e50c
+35 ldx $a2
+40 lda $d012
+45 jsr $ea13
+50 lda $a2
+55 cmp #$30
+60 bcs next
+65 jsr $e975
+70 jmp cont
+75 next jsr $e566
+80 jsr $e981
+90 cont jsr $ffe1
+95 bne loop
+98 jsr $a483
+97 rts

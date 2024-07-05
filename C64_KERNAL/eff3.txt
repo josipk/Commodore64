@@ -1,0 +1,9 @@
+5 *=$1000
+10 mloop ldx #00
+15 lda #$4c
+20 ora $d011
+35 jsr $ea13
+45 jsr $ab3b
+95 jsr $ffe1 !scan for break
+98 bne mloop
+99 rts

@@ -1,0 +1,11 @@
+5 *=$1000
+10 mloop ldx $a1
+20 lda #$4d
+30 jsr $ea13
+40 jsr $ab3b
+41 ora $d012 !raster line lb
+42 tax
+45 jsr $e9ff
+90 jsr $ffe1 !scan for break
+98 bne mloop
+99 rts
