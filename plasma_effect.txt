@@ -1,0 +1,30 @@
+#plasma effect for c64
+
+
+1 y=y+1 
+2 for x=1to40
+3 a=sin(y/5)*cos(x/5)+log(x+y)
+5 poke646,abs(a*2):print"Q";
+6 next
+7 goto 1
+
+
+1 y=y+1:m=8
+2 for x=1 to 40
+3 a=sin(x/m)-sin(y/m)+log(y*y)
+5 poke646,abs(a*2):print"Q";
+6 next
+7 goto 1
+
+
+#one-liners
+0y=y+.025:x=1-x*(x<40):a=sI(x/5)-sI(y/5)+log(y*x):pO646,aB(a*2):?"Q";:gO
+
+0y=y+.025:x=1-x*(x<40):m=log(x*y):a=sI(x/m)-sI(y/m):pO646,aB(a*2):?"Q";:gO
+
+0y=y+.025:x=1-x*(x<40):m=log(x+y):a=sI(x/m)-sI(y/m)+sQ(y):pO646,aB(a*2):?"Q";:gO
+
+0y=y+.03:x=1-x*(x<40):m=log(x+y):a=sI(x/m)-sI(y/m)-m^2:pO646,aB(a*2):?"Q";:gO
+
+0x=1-x*(x<40):y=y+.03:b=log(x+y):a=sI(borx/b)+cos(bory/b):pO646,aB(a*4):?"Q";:gO
+
