@@ -1,0 +1,67 @@
+Printing Strings in Assembly using Commodore 64 Kernal Routines
+===============================================
+Using $AB1E	(print null terminated string)
+
+5 *=$1000
+20 lda #<msg ;low byte msg address
+30 ldy #>msg ;high byte msg address
+40 jsr $ab1e ;print null terminated string
+50 rts
+60 msg byt "this is our message", $00
+
+===============================================
+Define text colour
+
+5 *=$1000
+10 lda #01
+15 sta $0286 !set cursor color 
+20 lda #<msg
+30 ldy #>msg
+40 jsr $ab1e
+50 rts
+60 msg txt "this is our message" 
+70 byt $00
+===============================================
+Infinite print / Rainbow colours
+
+5 *=$1000
+10 loop lda $a2
+15 sta $0286 !set cursor color 
+20 lda #<msg
+30 ldy #>msg
+40 jsr $ab1e
+50 jsr $ffe1
+60 bne loop
+70 rts
+80 msg txt "this is our message" 
+90 byt $00
+===============================================
+Using $FFD2	(print char)
+
+
+5 *=$1000
+10 ldx #$00
+20 loop lda msg,x
+30 jsr $ffd2
+40 inx
+50 cmp #$00
+60 bne loop
+70 rts
+80 msg byt "this is our message", $00
+
+===============================================
+Poke directly to screen memory
+
+
+5 *=$1000
+10 ldx #$00
+20 loop lda msg,x
+25 cmp #$00
+30 beq done
+35 and #$3f ;correction
+40 sta $400,x
+45 inx
+50 bvc loop !jmp loop
+55 done rts
+80 msg txt "this is our message" 
+90 byt $00
