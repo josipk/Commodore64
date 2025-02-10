@@ -39,14 +39,14 @@ rts
 ;ball subroutine
 ;two's complement to normal - x
 ball lda xv
-bpl *+3
+bpl *+6
 and #$7f
 eor #$7f
 tay
 
 ;two's complement to normal  - y
 lda yv
-bpl *+3
+bpl *+6
 and #$7f
 eor #$7f
 tax
