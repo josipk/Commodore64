@@ -33,13 +33,13 @@ Optimized code!
 
 200 ball nop 
 210 lda xv
-220 bpl *+3
+220 bpl *+6
 230 and #$7f
 240 eor #$7f
 250 tay
 
 260 lda yv
-270 bpl *+3
+270 bpl *+6
 280 and #$7f
 290 eor #$7f
 300 tax
