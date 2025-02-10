@@ -3,8 +3,6 @@ BOUNCE BALL (asm)
 *=$1000
 xv = $fb
 yv = $fc
-xb = $fd
-yb = $fe
 
 ;init x and y values
 lda #$d9
@@ -12,21 +10,8 @@ sta xv
 lda #$e8
 sta yv
 
-;two's complement to normal  
-loop lda xv
-bpl *+3
-and #$7f
-eor #$7f
-sta xb
-
-;two's complement to normal
-lda yv
-bpl *+3
-and #$7f
-eor #$7f
-sta yb
-
-jsr ball
+; call ball subroutine
+loop jsr ball
 
 ; increments x and y
 inc xv
@@ -49,18 +34,31 @@ sta yv
 ; detects stop/brk pressed to exit
 jsr $ffe1
 bne loop
-done rts
+rts
 
-; handle ball routine
-ball ldy xb
-ldx yb
+;ball subroutine
+;two's complement to normal - x
+ball lda xv
+bpl *+3
+and #$7f
+eor #$7f
+tay
+
+;two's complement to normal  - y
+lda yv
+bpl *+3
+and #$7f
+eor #$7f
+tax
+
+;calculate row position (y)
 lda $d9,x 
 and #$0f 
 sta $03
 lda $ecf0,x 
 sta $02
 
-; poke ball
+;poke ball (81)
 lda #81
 sta ($02),y
 
@@ -70,7 +68,6 @@ cmp $d012
 bne *-3
 
 ; poke space (ball disappear)
-ldy xb
 lda #32
 sta ($02),y
 rts
