@@ -1,3 +1,4 @@
+GRAB part of memory and SAVE it to drive #8
 
 ---
 5 rem grab and save kernal data
@@ -14,7 +15,7 @@
 
 
 
-Full version that restore all BASIC pointer vectors to the original values
+Full version that restores all BASIC pointer vectors to the original values
 ---
 10 s(0)=57344:s(1)=65535:n$(0)="kernal"
 20 fori=43to46:a(i-43)=peek(i):next
